@@ -1,45 +1,45 @@
-<form>
-  <button type="button" style="cursor:pointer;" value="Pay Now" id="submit">Pay Now</button>
-</form>
+<!doctype html>
 
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Giftsery</title>
+  <script src="https://api.ravepay.co/flwv3-pug/getpaidx/api/flwpbf-inline.js"></script>
+</head>
+<body onload="payWithRave()">
 
-<script type="text/javascript" src="https://flw-pms-dev.eu-west-1.elasticbeanstalk.com/flwv3-pug/getpaidx/api/flwpbf-inline.js"></script>
-<script>
-	 document.addEventListener("DOMContentLoaded", function(event) {
-  document.getElementById("submit").addEventListener("click", function(e) {
-    var PBFKey = "FLWPUBK-2be0dbd5e388cfffcc4282e862424f23-X";
+    <script>
+        const API_publicKey = "FLWPUBK-2be0dbd5e388cfffcc4282e862424f23-X";
     
-    getpaidSetup({
-      PBFPubKey: PBFKey,
-      customer_email: "user@example.com",
-      customer_firstname: "Temi",
-      customer_lastname: "Adelewa",
-      custom_description: "Pay Internet",
-      custom_logo: "http://localhost/communique-3/skin/frontend/ultimo/communique/custom/images/logo.svg",
-      custom_title: "Giftsery",
-      amount: 2000,
-      customer_phone: "256787744279",
-      country: "UG",
-      currency: "UGX",
-      txref: "rave-123456",
-      integrity_hash: "6800d2dcbb7a91f5f9556e1b5820096d3d74ed4560343fc89b03a42701da4f30",
-      onclose: function() {},
-      callback: function(response) {
-        var flw_ref = response.tx.flwRef; // collect flwRef returned and pass to a 					server page to complete status check.
-        console.log("This is the response returned after a charge", response);
-        if (
-          response.tx.chargeResponseCode == "00" ||
-          response.tx.chargeResponseCode == "0"
-        ) {
-          // redirect to a success page
-        } else {
-          // redirect to a failure page.
+        function payWithRave() {
+            var x = getpaidSetup({
+                PBFPubKey: API_publicKey,
+                customer_email: "mugenyie@gmail.com",
+                amount: 2000,
+                customer_phone: "256787744279",
+                currency: "UGX",
+                txref: "rave-123456",
+                meta: [{
+                    metaname: "flightID",
+                    metavalue: "AP1234"
+                }],
+                onclose: function() {},
+                callback: function(response) {
+                    var txref = response.tx.txRef; // collect txRef returned and pass to a 					server page to complete status check.
+                    console.log("This is the response returned after a charge", response);
+                    if (
+                        response.tx.chargeResponseCode == "00" ||
+                        response.tx.chargeResponseCode == "0"
+                    ) {
+                        // redirect to a success page
+                    } else {
+                        // redirect to a failure page.
+                    }
+    
+                    x.close(); // use this to close the modal immediately after payment.
+                }
+            });
         }
-      }
-    });
-  });
-});
-
-
-
-</script>
+    </script>
+</body>
+</html>
